@@ -1,36 +1,38 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-import * as z from zod;
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+import * as z from "zod";
+import { api } from "../state/api";
+import { toast } from "sonner";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
-
-export function formatPrice(cents:number|undefined):string{
-  return new Intl.NumberFormat("en-US",{
-    style:"currency",
-    currency:"USD",
-  }).format((cents|| 0)/100)
+// Convert cents to formatted currency string (e.g., 4999 -> "$49.99")
+export function formatPrice(cents: number | undefined): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format((cents || 0) / 100);
 }
 
-
-export function dollarsToCents(dollars:string|number):number{
-
-  const amount = typeof dollars==="string" ? parseFloat(dollars):dollars;
-  return Math.round(amount *100)
-
+// Convert dollars to cents (e.g., "49.99" -> 4999)
+export function dollarsToCents(dollars: string | number): number {
+  const amount = typeof dollars === "string" ? parseFloat(dollars) : dollars;
+  return Math.round(amount * 100);
 }
 
-export function centsToDollars(cents:number|undefined):string{
-  return ((cents||0)/100).toString();
+// Convert cents to dollars (e.g., 4999 -> "49.99")
+export function centsToDollars(cents: number | undefined): string {
+  return ((cents || 0) / 100).toString();
 }
 
-export const priceSchema = z.string().transform((val)=>{
+// Zod schema for price input (converts dollar input to cents)
+export const priceSchema = z.string().transform((val) => {
   const dollars = parseFloat(val);
-  if(isNaN(dollars)) return "0";
-  return dollarsToCents(dollars).toString()
-})
+  if (isNaN(dollars)) return "0";
+  return dollarsToCents(dollars).toString();
+});
 
 export const countries = [
   "Afghanistan",
@@ -228,9 +230,6 @@ export const countries = [
   "Zambia",
   "Zimbabwe",
 ];
-
-
-
 
 export const customStyles = "text-gray-300 placeholder:text-gray-500";
 
