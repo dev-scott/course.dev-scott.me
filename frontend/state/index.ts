@@ -70,6 +70,7 @@ export const globalSlice = createSlice({
       state.courseEditor.sections.splice(action.payload, 1);
     },
 
+
     addChapter: (
       state,
       action: PayloadAction<{ sectionIndex: number; chapter: Chapter }>
